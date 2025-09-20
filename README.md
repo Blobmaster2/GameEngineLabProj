@@ -36,7 +36,7 @@ flowchart
 	n9 --- n10["Check if player is falling too low"]
 	n11["Enemy kills player"]
 	n11 --- n12["Game Manager (Singleton)"]
-	style n12 fill:#7ED957
+	style n12 color:#000000,fill:#7ED957
 	n12
 	n13["Removes 1 life"]
 	n13 ---|"false"| n14["Reset Scene"]
@@ -46,11 +46,11 @@ flowchart
 	n17["Player reaches goal"]
 	n18@{ label: "Rectangle" }
 	n17 --- n18["Game Manager (Singleton)"]
-	style n18 fill:#7ED957
+	style n18 color:#000000,fill:#7ED957
 	n18 --- n19["Shows win  scene"]
-	style n2 fill:#FFBD59
-	style n13 fill:#FFBD59
-	style n4 fill:#CB6CE6
+	style n2 color:#000000,fill:#FFBD59
+	style n13 color:#000000,fill:#FFBD59
+	style n4 color:#000000,fill:#CB6CE6
 	n14 --- n20["Update Life UI"]
 ```
 ### Answers - Week 1:
