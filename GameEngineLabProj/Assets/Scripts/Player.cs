@@ -31,6 +31,12 @@ public class Player : MonoBehaviour
         _isGrounded = true;
     }
 
+    private void OnDisable()
+    {
+        _playerInput.actions["Attack"].performed -= Attack;
+        _playerInput.actions["Jump"].performed -= Jump;
+    }
+
     private void Update()
     {
         Move();
@@ -39,7 +45,7 @@ public class Player : MonoBehaviour
 
     void Attack(InputAction.CallbackContext ctx)
     {
-
+        //todo
     }
 
     private void Move()
@@ -58,8 +64,6 @@ public class Player : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext ctx)
     {
-        Debug.Log(_isGrounded);
-
         if (!_isGrounded)
         {
             return;
@@ -67,12 +71,16 @@ public class Player : MonoBehaviour
 
         _rb.AddForce(Vector2.up * _jumpForce);
         _isGrounded = false;
-        
     }
 
     private void UpdateSprite()
     {
         _sprite.transform.localScale = _facingRight ? Vector3.one : new Vector3(-1, 1, 1);
+    }
+
+    public void Die()
+    {
+        GameManager.Instance.RemoveLives();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

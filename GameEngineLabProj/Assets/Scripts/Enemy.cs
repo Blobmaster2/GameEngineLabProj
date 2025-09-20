@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.Instance.GameOver();
+            GameManager.Instance.RemoveLives();
         }
     }
 }
