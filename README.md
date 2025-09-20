@@ -1,10 +1,10 @@
 Scott Murphy - 100826964
 
-###Project
+### Project
 My project is called "Ultra Guy: Sandwich Fiend", and it is a basic 2D platformer. 
 You must scale the treacherous terrain and avoid hangry guys that are fiending for your sandwich. 
 
-###Diagram
+### Diagram
 ```mermaid
 flowchart
 	n1@{ label: "Rectangle" }
@@ -53,7 +53,7 @@ flowchart
 	style n4 fill:#CB6CE6
 	n14 --- n20["Update Life UI"]
 ```
-###Answers - Week 1:
+### Answers - Week 1:
 I chose to use a Singleton to create a Game Manager that manages aspects of the game. I decided to do a Game Manager class as a singleton because there are only supposed to be one of them, and I want it to persist across scenes to save data. 
 
 I think that this is a beneficial way to do a Singleton because it will allow me to build it out when I add more features into the game. The Game Manager should be able to be accessed from anywhere, and it should be able to persist across scenes to save it's data since it is the object that is controlling some of the game states.
