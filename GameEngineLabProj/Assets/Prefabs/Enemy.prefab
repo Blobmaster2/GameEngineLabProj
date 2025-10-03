@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5251730229473817055}
   - component: {fileID: 1510680813848097126}
   - component: {fileID: 8748626103892079277}
+  - component: {fileID: 274909454729104848}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -93,10 +94,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a1d62b2fcec4de488e4b5a5fa845982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxWalkDuration: 1
-  _walkSpeed: 2
-  _maxWalkSpeed: 4
+  _flipImage: 1
   _sprite: {fileID: 8631196435261101619}
+  _maxSpeed: 0
+  _moveSpeed: 0
+  _maxWalkDuration: 1
 --- !u!50 &8748626103892079277
 Rigidbody2D:
   serializedVersion: 5
@@ -124,6 +126,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &274909454729104848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2469108924304454943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066b5cf2fd16b2a4caf51e9617881fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 2465777245843827378}
 --- !u!1 &8631196435261101619
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3848723919788232985}
   - component: {fileID: 5450215949533147982}
+  - component: {fileID: 2465777245843827378}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -211,3 +227,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2465777245843827378
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8631196435261101619}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2f5c83795fc79b04790a76d06eb86336, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

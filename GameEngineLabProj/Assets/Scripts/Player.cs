@@ -2,45 +2,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
-    [SerializeField] private float _maxSpeed;
-    [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpForce;
 
-    [SerializeField] private GameObject _sprite;
-
-    private bool _facingRight;
-    private bool _isGrounded;
-
-    private PlayerInput _playerInput;
-    private Rigidbody2D _rb;
+    public PlayerInput PlayerInput {  get; private set; }
 
     private Vector2 _currentInput => 
-        _playerInput.actions["Move"].ReadValue<Vector2>();
+        PlayerInput.actions["Move"].ReadValue<Vector2>();
 
-    private void Start()
+    protected override void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _playerInput = GetComponent<PlayerInput>();
+        base.Start();
 
-        _playerInput.actions["Attack"].performed += Attack;
-        _playerInput.actions["Jump"].performed += Jump;
+        PlayerInput = GetComponent<PlayerInput>();
+
+        PlayerInput.actions["Attack"].performed += Attack;
+        PlayerInput.actions["Jump"].performed += Jump;
 
         _facingRight = true;
-        _isGrounded = true;
     }
 
     private void OnDisable()
     {
-        _playerInput.actions["Attack"].performed -= Attack;
-        _playerInput.actions["Jump"].performed -= Jump;
+        PlayerInput.actions["Attack"].performed -= Attack;
+        PlayerInput.actions["Jump"].performed -= Jump;
     }
 
     private void Update()
     {
-        Move();
-        UpdateSprite();
+        Move(_currentInput);
     }
 
     void Attack(InputAction.CallbackContext ctx)
@@ -48,46 +39,18 @@ public class Player : MonoBehaviour
         //todo
     }
 
-    private void Move()
-    {
-        _rb.AddForce(new Vector2(_currentInput.x, 0));
-
-        _rb.linearVelocity = new Vector2(Mathf.Clamp(_rb.linearVelocityX, -_maxSpeed, _maxSpeed), _rb.linearVelocityY);
-
-        if (_currentInput.x == 0)
-        {
-            return;
-        }
-
-        _facingRight = _currentInput.x > 0 ? true : false;
-    }
-
     private void Jump(InputAction.CallbackContext ctx)
     {
-        if (!_isGrounded)
+        if (!IsGrounded)
         {
             return;
         }
 
         _rb.AddForce(Vector2.up * _jumpForce);
-        _isGrounded = false;
-    }
-
-    private void UpdateSprite()
-    {
-        _sprite.transform.localScale = _facingRight ? Vector3.one : new Vector3(-1, 1, 1);
     }
 
     public void Die()
     {
         GameManager.Instance.RemoveLives();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            _isGrounded = true;
-        }
     }
 }

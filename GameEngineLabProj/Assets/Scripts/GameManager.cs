@@ -30,7 +30,14 @@ public class GameManager : MonoBehaviour
             _currentTime = _maxTime;
             loadedScene = SceneManager.GetActiveScene();
             UIManager.Instance.UpdateTimer(_currentTime);
+
+            SceneManager.sceneLoaded += delegate
+            {
+                TryGetPlayer();
+            };
         }
+
+        StartCoroutine(WaitToInit());
     }
 
     private void Update()
@@ -40,18 +47,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Player == null)
-        {
-            if (!TryGetPlayer())
-            {
-                return;
-            }
-        }
-
         if (Player.transform.position.y < -30)
         {
             Player.Die();
         }
+
+        Debug.Log(Player.transform.position);
     }
 
     public void RemoveLives()
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Game");
         Time.timeScale = 1;
         _currentTime = _maxTime;
-                    UIManager.Instance.UpdateTimer(_currentTime);
+        UIManager.Instance.UpdateTimer(_currentTime);
 
         loadedScene = SceneManager.GetActiveScene();
     }
@@ -121,5 +122,18 @@ public class GameManager : MonoBehaviour
                 RemoveLives();
             }
         }
+    }
+
+    private void Exit()
+    {
+        Application.Quit();
+    }
+
+    private IEnumerator WaitToInit()
+    {
+        yield return new WaitForEndOfFrame();
+
+        Player.PlayerInput.actions["Escape"].performed += (ctx) => Exit();
+        Player.PlayerInput.actions["ReloadGame"].performed += (ctx) => ReloadGame();
     }
 }
