@@ -1,12 +1,32 @@
 using UnityEngine;
 
-public class Enemy : Entity
+public class Enemy : Entity, ISpawnable
 {
     private float _walkDuration;
     private bool _goingRight;
     [SerializeField] private float _maxWalkDuration;
 
-    void Update()
+    protected override void Start()
+    {
+        base.Start();
+    }
+
+    public void Despawn()
+    {
+        Destroy(gameObject);
+    }
+
+    public GameObject Spawn(Vector2 position)
+    {
+        return Instantiate(gameObject, position, Quaternion.identity);
+    }
+
+    public void Initialize(Vector2 force)
+    {
+        _rb.AddForce(force, ForceMode2D.Impulse);
+    }
+
+    private void FixedUpdate()
     {
         if (_walkDuration <= _maxWalkDuration)
         {
@@ -32,7 +52,7 @@ public class Enemy : Entity
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.Instance.RemoveLives();
+            collision.gameObject.GetComponent<Player>().Die();
         }
     }
 }

@@ -29,7 +29,7 @@ public class Player : Entity
         PlayerInput.actions["Jump"].performed -= Jump;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Move(_currentInput);
     }
@@ -49,7 +49,7 @@ public class Player : Entity
         _rb.AddForce(Vector2.up * _jumpForce);
     }
 
-    public void Die()
+    public override void Die()
     {
         GameManager.Instance.RemoveLives();
     }

@@ -23,6 +23,14 @@ public class Entity : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
+    protected virtual void Update()
+    {
+        if (transform.position.y < -30)
+        {
+            Die();
+        }
+    }
+
     private void UpdateSprite()
     {
         var imageOrientation = _flipImage ? !_facingRight : _facingRight;
@@ -32,8 +40,15 @@ public class Entity : MonoBehaviour
 
     protected virtual void Move(Vector2 dir)
     {
-        _rb.AddForce(new Vector2(dir.x, 0));
-
+        if (IsGrounded)
+        {
+            _rb.AddForce(new Vector2(dir.x, 0) * _moveSpeed);
+        }
+        else
+        {
+            _rb.AddForce(new Vector2(dir.x, 0) * _moveSpeed / 4);
+        }
+        
         _rb.linearVelocity = new Vector2(Mathf.Clamp(_rb.linearVelocityX, -_maxSpeed, _maxSpeed), _rb.linearVelocityY);
 
         if (dir.x > 0)
@@ -52,6 +67,11 @@ public class Entity : MonoBehaviour
         }
 
         UpdateSprite();
+    }
+
+    public virtual void Die()
+    {
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

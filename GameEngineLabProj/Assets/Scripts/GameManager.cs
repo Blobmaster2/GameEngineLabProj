@@ -17,11 +17,12 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
+            Debug.Log(gameObject);
             Destroy(gameObject);
         }
-        else
+        else if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -31,13 +32,13 @@ public class GameManager : MonoBehaviour
             loadedScene = SceneManager.GetActiveScene();
             UIManager.Instance.UpdateTimer(_currentTime);
 
-            SceneManager.sceneLoaded += delegate
+            SceneManager.activeSceneChanged += delegate
             {
-                TryGetPlayer();
+                loadedScene = SceneManager.GetActiveScene();
             };
-        }
 
-        StartCoroutine(WaitToInit());
+            StartCoroutine(WaitToInit());
+        }
     }
 
     private void Update()
@@ -47,12 +48,10 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Player.transform.position.y < -30)
+        if (Player == null)
         {
-            Player.Die();
+            TryGetPlayer();
         }
-
-        Debug.Log(Player.transform.position);
     }
 
     public void RemoveLives()
@@ -65,47 +64,40 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            ReloadGame();
+            ReloadGame(false);
         }
     }
 
-    private bool TryGetPlayer()
+    private void TryGetPlayer()
     {
         var playerObj = GameObject.Find("Player");
 
         if (playerObj != null)
         {
             Player = playerObj.GetComponent<Player>();
-            return true;
         }
-
-        return false;
     }
 
     private void GameOver()
     {
         SceneManager.LoadScene("GameOver");
-        Time.timeScale = 0;
-
-        loadedScene = SceneManager.GetActiveScene();
     }
 
     public void YouWin()
     {
         SceneManager.LoadScene("YouWin");
-        Time.timeScale = 0;
-
-        loadedScene = SceneManager.GetActiveScene();
     }
 
-    public void ReloadGame()
+    public void ReloadGame(bool resetLives)
     {
         SceneManager.LoadScene("Game");
-        Time.timeScale = 1;
         _currentTime = _maxTime;
         UIManager.Instance.UpdateTimer(_currentTime);
 
-        loadedScene = SceneManager.GetActiveScene();
+        if (resetLives)
+        {
+            _lifeCount = 3;
+        }
     }
 
     IEnumerator TimerRoutine()
@@ -124,8 +116,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Exit()
+    public void Exit()
     {
+        UnInit();
+
         Application.Quit();
     }
 
@@ -134,6 +128,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         Player.PlayerInput.actions["Escape"].performed += (ctx) => Exit();
-        Player.PlayerInput.actions["ReloadGame"].performed += (ctx) => ReloadGame();
+        Player.PlayerInput.actions["ReloadGame"].performed += (ctx) => ReloadGame(false);
+    }
+
+    private void UnInit()
+    {
+        Player.PlayerInput.actions["Escape"].performed -= (ctx) => Exit();
+        Player.PlayerInput.actions["ReloadGame"].performed -= (ctx) => ReloadGame(false);
     }
 }
