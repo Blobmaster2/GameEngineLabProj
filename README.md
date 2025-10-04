@@ -61,7 +61,7 @@ I think that this is a beneficial way to do a Singleton because it will allow me
 
 
 ### Diagram - Factory
-```
+```mermaid
 flowchart
 	n1["Factory"]
 	n1["ObjectFactory"]
